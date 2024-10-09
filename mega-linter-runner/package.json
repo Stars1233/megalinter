@@ -1,6 +1,6 @@
 {
   "name": "mega-linter-runner",
-  "version": "7.13.0",
+  "version": "8.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/oxsecurity/megalinter.git"
@@ -91,7 +91,7 @@
     "optionator": "^0.9.3",
     "prompts": "^2.4.2",
     "uuid": "^10.0.0",
-    "which": "^4.0.0",
+    "which": "^5.0.0",
     "yeoman-environment": "^4.0.0",
     "yeoman-generator": "^7.1.0"
   },

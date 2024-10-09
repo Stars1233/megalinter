@@ -692,6 +692,7 @@ def generate_linter_dockerfiles():
                 "    GITHUB_STATUS_REPORTER=false \\",
                 "    GITHUB_COMMENT_REPORTER=false \\",
                 "    EMAIL_REPORTER=false \\",
+                "    API_REPORTER=false \\",
                 "    FILEIO_REPORTER=false \\",
                 "    CONFIG_REPORTER=false \\",
                 "    SARIF_TO_HUMAN=false" "",
@@ -3286,6 +3287,14 @@ def generate_version():
     )
     print(process.stdout)
     print(process.stderr)
+    # Update python project version:
+    process = subprocess.run(
+        ["hatch", "version", RELEASE_TAG],
+        stdout=subprocess.PIPE,
+        text=True,
+        shell=True,
+        check=False,
+    )
     # Update changelog
     if UPDATE_CHANGELOG is True:
         changelog_file = f"{REPO_HOME}/CHANGELOG.md"

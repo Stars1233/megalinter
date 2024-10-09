@@ -97,6 +97,8 @@ jobs:
             "kubernetes_kubescape",
             "latex_chktex",
             "lua_luacheck",
+            "lua_selene",
+            "lua_stylua",
             "markdown_markdownlint",
             "markdown_markdown_link_check",
             "markdown_markdown_table_formatter",
@@ -249,3 +251,5 @@ jobs:
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
           timeout: 10m0s
+        env:
+            ACTIONS_RUNTIME_TOKEN: ${{ secrets.GITHUB_TOKEN }}
