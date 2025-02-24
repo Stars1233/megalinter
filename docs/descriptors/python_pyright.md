@@ -19,7 +19,7 @@ If you don't use python static typing, you should disable this linter by adding 
 
 ## pyright documentation
 
-- Version in MegaLinter: **1.1.391**
+- Version in MegaLinter: **1.1.394**
 - Visit [Official Web Site](https://github.com/Microsoft/pyright#readme){target=_blank}
 - See [How to configure pyright rules](https://github.com/microsoft/pyright/blob/main/docs/configuration.md){target=_blank}
 - See [How to disable pyright rules in files](https://github.com/microsoft/pyright/blob/main/docs/comments.md#file-level-type-controls){target=_blank}
@@ -70,7 +70,7 @@ This linter is available in the following flavors
 |:--------------------------------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------|:------------------------------------------------|:----------------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 | <img src="https://github.com/oxsecurity/megalinter/raw/main/docs/assets/images/mega-linter-square.png" alt="" height="32px" class="megalinter-icon"></a> | [all](https://megalinter.io/beta/supported-linters/)   | Default MegaLinter Flavor                       |       125        |                 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/oxsecurity/megalinter/beta) ![Docker Pulls](https://img.shields.io/docker/pulls/oxsecurity/megalinter) |
 |       <img src="https://github.com/oxsecurity/megalinter/raw/main/docs/assets/icons/cupcake.ico" alt="" height="32px" class="megalinter-icon"></a>       | [cupcake](https://megalinter.io/beta/flavors/cupcake/) | MegaLinter for the most commonly used languages |        85        | ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/oxsecurity/megalinter-cupcake/beta) ![Docker Pulls](https://img.shields.io/docker/pulls/oxsecurity/megalinter-cupcake) |
-|       <img src="https://github.com/oxsecurity/megalinter/raw/main/docs/assets/icons/python.ico" alt="" height="32px" class="megalinter-icon"></a>        | [python](https://megalinter.io/beta/flavors/python/)   | Optimized for PYTHON based projects             |        63        |   ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/oxsecurity/megalinter-python/beta) ![Docker Pulls](https://img.shields.io/docker/pulls/oxsecurity/megalinter-python) |
+|       <img src="https://github.com/oxsecurity/megalinter/raw/main/docs/assets/icons/python.ico" alt="" height="32px" class="megalinter-icon"></a>        | [python](https://megalinter.io/beta/flavors/python/)   | Optimized for PYTHON based projects             |        62        |   ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/oxsecurity/megalinter-python/beta) ![Docker Pulls](https://img.shields.io/docker/pulls/oxsecurity/megalinter-python) |
 
 ## Behind the scenes
 
@@ -126,7 +126,11 @@ Usage: pyright [options] files...
 
 ### Installation on mega-linter Docker image
 
-- APK packages (Linux):
-  - [nodejs](https://pkgs.alpinelinux.org/packages?branch=edge&name=nodejs)
-- PIP packages (Python):
-  - [pyright](https://pypi.org/project/pyright)
+- Dockerfile commands :
+```dockerfile
+# renovate: datasource=npm depName=pyright
+ARG NPM_PYRIGHT_VERSION=1.1.394
+```
+
+- NPM packages (node.js):
+  - [pyright@1.1.394](https://www.npmjs.com/package/pyright/v/1.1.394)

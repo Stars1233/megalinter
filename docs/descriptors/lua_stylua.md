@@ -196,6 +196,8 @@ RUN wget --tries=5 https://www.lua.org/ftp/lua-5.3.5.tar.gz -O - -q | tar -xzf -
 
 # Linter install
 # renovate: datasource=crate depName=stylua
-ARG LUA_STYLUA_VERSION=2.0.0
+ARG CARGO_STYLUA_VERSION=2.0.0
 ```
 
+- Cargo packages (Rust):
+  - [stylua@2.0.0](https://crates.io/crates/stylua/2.0.0)
