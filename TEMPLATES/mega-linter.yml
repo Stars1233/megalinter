@@ -104,6 +104,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: MegaLinter reports
+          include-hidden-files: "true"
           path: |
             megalinter-reports
             mega-linter.log
@@ -172,4 +173,4 @@ jobs:
             }}
           commit_message: "[MegaLinter] Apply linters fixes"
           commit_user_name: megalinter-bot
-          commit_user_email: nicolas.vuillamy@ox.security
+          commit_user_email: 129584137+megalinter-bot@users.noreply.github.com

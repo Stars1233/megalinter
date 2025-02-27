@@ -32,12 +32,11 @@ linters:
       dockerfile:
         - |-
           # renovate: datasource=pypi depName=sqlfluff
-          ARG SQL_SQLFLUFF_VERSION=3.3.0
+          ARG PIP_SQLFLUFF_VERSION=3.3.1
       pip:
-        - sqlfluff==${SQL_SQLFLUFF_VERSION}
+        - sqlfluff==${PIP_SQLFLUFF_VERSION}
   # TSQL
-  - class: DotNetToolLinter
-    linter_name: tsqllint
+  - linter_name: tsqllint
     disabled: false
     descriptor_flavors:
       - dotnet
@@ -50,6 +49,10 @@ linters:
     linter_rules_inline_disable_url: https://github.com/tsqllint/tsqllint#disabling-rules-with-inline-comments
     config_file_name: ".tsqllintrc"
     cli_lint_mode: list_of_files
+    cli_lint_errors_count: regex_number
+    cli_lint_errors_regex: "([0-9]+) Errors"
+    cli_lint_warnings_count: regex_number
+    cli_lint_warnings_regex: "([0-9]+) Warnings"
     cli_config_arg_name: "--config"
     cli_help_arg_name: "--help"
     cli_version_arg_name: "--version"
@@ -59,9 +62,12 @@ linters:
       - "tsqllint myfile.sql myfile2.sql"
     install:
       dockerfile:
-        - RUN apk add --no-cache dotnet8-sdk
+        - |-
+          # renovate: datasource=nuget depName=TSQLLint
+          ARG SQL_TSQLLINT_VERSION=1.16.0
+        - RUN apk add --no-cache dotnet9-sdk
         - ENV PATH="${PATH}:/root/.dotnet/tools"
-        - RUN dotnet tool install --global TSQLLint
+        - RUN dotnet tool install --allow-roll-forward --global TSQLLint --version ${SQL_TSQLLINT_VERSION}
     ide:
       vscode:
         - name: TSQL Lint

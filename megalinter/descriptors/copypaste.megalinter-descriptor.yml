@@ -41,8 +41,6 @@ linters:
       - --gitignore
       - "--reporters"
       - "console,html"
-      - "--exitCode"
-      - "1"
     cli_lint_extra_args_after:
       - "."
     cli_lint_errors_count: regex_number
@@ -51,9 +49,9 @@ linters:
       - "jscpd --output ./report/copy-paste/ ."
       - "jscpd --output ./report/copy-paste/ -c .jscpd.json ."
     install:
-      apk:
-        - nodejs
-        - npm
-        - yarn
+      dockerfile:
+        - |-
+          # renovate: datasource=npm depName=jscpd
+          ARG NPM_JSCPD_VERSION=4.0.5
       npm:
-        - jscpd
+        - jscpd@${NPM_JSCPD_VERSION}

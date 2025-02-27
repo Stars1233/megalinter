@@ -28,6 +28,18 @@ from giturlparse import parse
 from megalinter import config, utils
 from megalinter.constants import (
     DEFAULT_DOCKERFILE_APK_PACKAGES,
+    DEFAULT_DOCKERFILE_ARGS,
+    DEFAULT_DOCKERFILE_DOCKER_APK_PACKAGES,
+    DEFAULT_DOCKERFILE_DOCKER_ARGS,
+    DEFAULT_DOCKERFILE_FLAVOR_ARGS,
+    DEFAULT_DOCKERFILE_FLAVOR_CARGO_PACKAGES,
+    DEFAULT_DOCKERFILE_GEM_APK_PACKAGES,
+    DEFAULT_DOCKERFILE_GEM_ARGS,
+    DEFAULT_DOCKERFILE_NPM_APK_PACKAGES,
+    DEFAULT_DOCKERFILE_NPM_ARGS,
+    DEFAULT_DOCKERFILE_PIP_ARGS,
+    DEFAULT_DOCKERFILE_PIPENV_ARGS,
+    DEFAULT_DOCKERFILE_RUST_ARGS,
     DEFAULT_RELEASE,
     DEFAULT_REPORT_FOLDER_NAME,
     ML_DOC_URL_BASE,
@@ -134,6 +146,27 @@ DEPRECATED_LINTERS = [
 ]
 
 DESCRIPTORS_FOR_BUILD_CACHE = None
+
+MAIN_DOCKERFILE = f"{REPO_HOME}/Dockerfile"
+
+ALPINE_VERSION = ""
+
+MAIN_DOCKERFILE_ARGS_MAP = {}
+
+with open(MAIN_DOCKERFILE, "r", encoding="utf-8") as main_dockerfile_file:
+    main_dockerfile_content = main_dockerfile_file.read()
+
+    match = re.search(r"FROM python:.*-alpine(\d+.\d+.?\d+)", main_dockerfile_content)
+
+    if match:
+        ALPINE_VERSION = match.group(1)
+    else:
+        logging.critical("No Alpine version found")
+
+    matches = re.finditer(r"ARG (.*)=(.*)", main_dockerfile_content)
+
+    for match in matches:
+        MAIN_DOCKERFILE_ARGS_MAP[match.group(1)] = match.group(2)
 
 
 # Generate one Dockerfile by MegaLinter flavor
@@ -279,7 +312,8 @@ branding:
         requires_docker,
         flavor,
         extra_lines,
-        {"cargo": ["sarif-fmt"]},
+        DEFAULT_DOCKERFILE_FLAVOR_ARGS.copy(),
+        {"cargo": DEFAULT_DOCKERFILE_FLAVOR_CARGO_PACKAGES.copy()},
     )
 
 
@@ -289,13 +323,16 @@ def build_dockerfile(
     requires_docker,
     flavor,
     extra_lines,
+    extra_args=None,
     extra_packages=None,
 ):
     if extra_packages is None:
         extra_packages = {}
     # Gather all dockerfile commands
     docker_from = []
-    docker_arg = []
+    docker_arg = DEFAULT_DOCKERFILE_ARGS.copy()
+    if extra_args is not None:
+        docker_arg += extra_args
     docker_copy = []
     docker_other = []
     all_dockerfile_items = []
@@ -308,7 +345,8 @@ def build_dockerfile(
     is_docker_other_run = False
     # Manage docker
     if requires_docker is True:
-        apk_packages += ["docker", "openrc"]
+        docker_arg += DEFAULT_DOCKERFILE_DOCKER_ARGS.copy()
+        apk_packages += DEFAULT_DOCKERFILE_DOCKER_APK_PACKAGES.copy()
         docker_other += [
             "RUN rc-update add docker boot && (rc-service docker start || true)"
         ]
@@ -421,14 +459,23 @@ def build_dockerfile(
             cargo_packages += item["install"]["cargo"]
     # Add node install if node packages are here
     if len(npm_packages) > 0:
-        apk_packages += ["npm", "nodejs-current", "yarn"]
+        docker_arg += DEFAULT_DOCKERFILE_NPM_ARGS.copy()
+        apk_packages += DEFAULT_DOCKERFILE_NPM_APK_PACKAGES.copy()
     # Add ruby apk packages if gem packages are here
     if len(gem_packages) > 0:
-        apk_packages += ["ruby", "ruby-dev", "ruby-bundler", "ruby-rdoc"]
+        docker_arg += DEFAULT_DOCKERFILE_GEM_ARGS.copy()
+        apk_packages += DEFAULT_DOCKERFILE_GEM_APK_PACKAGES.copy()
+    if len(pip_packages) > 0:
+        docker_arg += DEFAULT_DOCKERFILE_PIP_ARGS.copy()
+    if len(pipvenv_packages) > 0:
+        docker_arg += DEFAULT_DOCKERFILE_PIPENV_ARGS.copy()
+    if len(cargo_packages) > 0:
+        docker_arg += DEFAULT_DOCKERFILE_RUST_ARGS.copy()
     # Separate args used in FROM instructions from others
     all_from_instructions = "\n".join(list(dict.fromkeys(docker_from)))
     docker_arg_top = []
     docker_arg_main = []
+    docker_arg_main_extra = []
     for docker_arg_item in docker_arg:
         match = re.match(
             r"(?:# renovate: .*\n)?ARG\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=?\s*",
@@ -439,6 +486,14 @@ def build_dockerfile(
             docker_arg_top += [docker_arg_item]
         else:
             docker_arg_main += [docker_arg_item]
+
+        if docker_arg_item in docker_arg_top:
+            docker_arg_main_extra += [f"ARG {arg_name}"]
+
+    if len(docker_arg_main_extra) > 0:
+        docker_arg_main_extra.insert(0, "")
+
+        docker_arg_main += docker_arg_main_extra
     # Replace between tags in Dockerfile
     # Commands
     replace_in_file(
@@ -500,14 +555,14 @@ def build_dockerfile(
             cargo_packages = [
                 p for p in cargo_packages if p != "COMPILER_ONLY"
             ]  # remove empty string packages
-            cargo_cmd = "cargo install --force --locked " + "  ".join(
+            cargo_cmd = "cargo install --force --locked " + " ".join(
                 list(dict.fromkeys(cargo_packages))
             )
             rust_commands += [cargo_cmd]
         rustup_cargo_cmd = " && ".join(rust_commands)
         cargo_install_command = (
             "RUN curl https://sh.rustup.rs -sSf |"
-            + " sh -s -- -y --profile minimal --default-toolchain stable \\\n"
+            + " sh -s -- -y --profile minimal --default-toolchain ${RUST_RUST_VERSION} \\\n"
             + '    && export PATH="/root/.cargo/bin:${PATH}" \\\n'
             + f"    && {rustup_cargo_cmd} \\\n"
             + "    && rm -rf /root/.cargo/registry /root/.cargo/git "
@@ -524,7 +579,7 @@ def build_dockerfile(
             "WORKDIR /node-deps\n"
             + "RUN npm --no-cache install --ignore-scripts --omit=dev \\\n                "
             + " \\\n                ".join(list(dict.fromkeys(npm_packages)))
-            + "  && \\\n"
+            + " && \\\n"
             #    + '       echo "Fixing audit issues with npm…" \\\n'
             #    + "    && npm audit fix --audit-level=critical || true \\\n" # Deactivated for now
             + '    echo "Cleaning npm cache…" \\\n'
@@ -550,8 +605,8 @@ def build_dockerfile(
     pip_install_command = ""
     if len(pip_packages) > 0:
         pip_install_command = (
-            "RUN PYTHONDONTWRITEBYTECODE=1 pip3 install --no-cache-dir --upgrade pip &&"
-            + " PYTHONDONTWRITEBYTECODE=1 pip3 install --no-cache-dir --upgrade \\\n          '"
+            "RUN PYTHONDONTWRITEBYTECODE=1 pip3 install --no-cache-dir pip==${PIP_PIP_VERSION} &&"
+            + " PYTHONDONTWRITEBYTECODE=1 pip3 install --no-cache-dir \\\n          '"
             + "' \\\n          '".join(list(dict.fromkeys(pip_packages)))
             + "' && \\\n"
             + r"find . \( -type f \( -iname \*.pyc -o -iname \*.pyo \) -o -type d -iname __pycache__ \) -delete"
@@ -563,7 +618,7 @@ def build_dockerfile(
     if len(pipvenv_packages.items()) > 0:
         pipenv_install_command = (
             "RUN PYTHONDONTWRITEBYTECODE=1 pip3 install"
-            " --no-cache-dir --upgrade pip virtualenv \\\n"
+            " --no-cache-dir pip==${PIP_PIP_VERSION} virtualenv==${PIP_VIRTUALENV_VERSION} \\\n"
         )
         env_path_command = 'ENV PATH="${PATH}"'
         for pip_linter, pip_linter_packages in pipvenv_packages.items():
@@ -1281,7 +1336,7 @@ def process_type(linters_by_type, type1, type_label, linters_tables_md):
         if hasattr(linter, "disabled") and linter.disabled is True:
             linter_doc_md += [""]
             linter_doc_md += ["_This linter has been disabled in this version_"]
-            if hasattr(linter, "disabled_reason") and linter.disabled_reason is True:
+            if hasattr(linter, "disabled_reason") and linter.disabled_reason:
                 linter_doc_md += [""]
                 linter_doc_md += [f"_Disabled reason: {linter.disabled_reason}_"]
 
@@ -2138,7 +2193,15 @@ def get_install_md(item):
             item["install"]["apk"],
             "apk",
             "  ",
-            "https://pkgs.alpinelinux.org/packages?branch=edge&name=",
+            f"https://pkgs.alpinelinux.org/packages?branch=v{ALPINE_VERSION}&arch=x86_64&name=",
+        )
+    if "cargo" in item["install"]:
+        linter_doc_md += ["- Cargo packages (Rust):"]
+        linter_doc_md += md_package_list(
+            item["install"]["cargo"],
+            "cargo",
+            "  ",
+            "https://crates.io/crates/",
         )
     if "npm" in item["install"]:
         linter_doc_md += ["- NPM packages (node.js):"]
@@ -2279,27 +2342,74 @@ def merge_install_attr(item):
 
 def md_package_list(package_list, type, indent, start_url):
     res = []
-    for package_id_v in package_list:
-        package_id = package_id_v
-        package_version = ""
+    for package in package_list:
+        package_name = package
+        end_url = package
 
-        if type == "npm" and package_id.count("@") == 2:  # npm specific version
-            package_id_split = package_id.split("@")
-            package_id = "@" + package_id_split[1]
-            package_version = "/v/" + package_id_split[2]
-        elif type == "pip" and "==" in package_id_v:  # py specific version
-            package_id = package_id_v.split("==")[0]
-            package_version = "/" + package_id_v.split("==")[1]
-        elif type == "gem":
-            gem_match = re.match(
-                r"(.*)\s-v\s(.*)", package_id_v
-            )  # gem specific version
+        if type == "cargo":  # cargo specific version
+            match = re.search(r"(.*)@(.*)", package)
 
-            if gem_match:  # gem specific version
-                package_id = gem_match.group(1)
-                package_version = "/versions/" + gem_match.group(2)
-        res += [f"{indent}- [{package_id_v}]({start_url}{package_id}{package_version})"]
+            if match:
+                package_id = match.group(1)
+                package_version = get_arg_variable_value(match.group(2))
+
+                if package_version is not None:
+                    package_name = f"{package_id}@{package_version}"
+                    end_url = f"{package_id}/{package_version}"
+                else:
+                    package_name = package_id
+                    end_url = package_id
+        elif type == "npm":  # npm specific version
+            match = re.search(r"(.*)@(.*)", package)
+
+            if match:
+                package_id = match.group(1)
+                package_version = get_arg_variable_value(match.group(2))
+
+                if package_version is not None:
+                    package_name = f"{package_id}@{package_version}"
+                    end_url = f"{package_id}/v/{package_version}"
+                else:
+                    package_name = package_id
+                    end_url = package_id
+        elif type == "pip":  # py specific version
+            match = re.search(r"(.*)==(.*)", package)
+
+            if match:
+                package_id = match.group(1)
+                package_version = get_arg_variable_value(match.group(2))
+
+                if package_version is not None:
+                    package_name = f"{package_id}=={package_version}"
+                    end_url = f"{package_id}/{package_version}"
+                else:
+                    package_name = package_id
+                    end_url = package_id
+        elif type == "gem":  # gem specific version
+            match = re.search(r"(.*):(.*)", package)
+
+            if match:
+                package_id = match.group(1)
+                package_version = get_arg_variable_value(match.group(2))
+
+                if package_version is not None:
+                    package_name = f"{package_id}:{package_version}"
+                    end_url = f"{package_id}/versions/{package_version}"
+                else:
+                    package_name = package_id
+                    end_url = package_id
+
+        res += [f"{indent}- [{package_name}]({start_url}{end_url})"]
     return res
+
+
+def get_arg_variable_value(package_version):
+    extracted_version = re.search(r"\$\{(.*)\}", package_version).group(1)
+
+    if extracted_version in MAIN_DOCKERFILE_ARGS_MAP:
+        return MAIN_DOCKERFILE_ARGS_MAP[extracted_version]
+    else:
+        return None
 
 
 def replace_in_file(file_path, start, end, content, add_new_line=True):
@@ -3106,6 +3216,10 @@ def get_badges(
     badges = []
     repo = get_github_repo(linter)
 
+    if (hasattr(linter, "get") and linter.get("disabled") is True) or (
+        hasattr(linter, "disabled") and linter.disabled is True
+    ):
+        badges += ["![disabled](https://shields.io/badge/-disabled-orange)"]
     if (hasattr(linter, "get") and linter.get("deprecated") is True) or (
         hasattr(linter, "deprecated") and linter.deprecated is True
     ):
