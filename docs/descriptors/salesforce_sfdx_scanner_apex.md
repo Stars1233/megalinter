@@ -7,7 +7,18 @@ description: How to use sfdx-scanner-apex (configure, ignore files, ignore error
 # sfdx-scanner-apex
 [![GitHub stars](https://img.shields.io/github/stars/forcedotcom/code-analyzer?cacheSeconds=3600)](https://github.com/forcedotcom/code-analyzer) [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/forcedotcom/code-analyzer?sort=semver)](https://github.com/forcedotcom/code-analyzer/releases) [![GitHub last commit](https://img.shields.io/github/last-commit/forcedotcom/code-analyzer)](https://github.com/forcedotcom/code-analyzer/commits) [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/forcedotcom/code-analyzer)](https://github.com/forcedotcom/code-analyzer/graphs/commit-activity/) [![GitHub contributors](https://img.shields.io/github/contributors/forcedotcom/code-analyzer)](https://github.com/forcedotcom/code-analyzer/graphs/contributors/)
 
-sfdx-scanner is a sfdx plugin scanning apex and triggers using Apex PMD, and javascript using eslint
+**Salesforce Code Analyzer (SFDX Scanner)** is the official Salesforce CLI plugin for scanning Apex code, triggers, and other Salesforce components to identify potential issues, security vulnerabilities, and code quality problems. It uses industry-standard tools like PMD and ESLint to provide comprehensive analysis of Salesforce development artifacts.
+
+**Key Features:**
+
+- **Multi-Engine Analysis**: Combines PMD for Apex analysis with ESLint for JavaScript/Lightning Web Components
+- **Security Focus**: Identifies security vulnerabilities and potential attack vectors in Salesforce code
+- **Performance Optimization**: Detects performance anti-patterns and inefficient code constructs
+- **Code Quality Rules**: Comprehensive rule sets covering best practices, naming conventions, and maintainability
+- **Configurable Severity**: Customizable severity thresholds and rule categories for different project needs
+- **Multiple Output Formats**: Supports CSV, JSON, SARIF, and other formats for integration with development tools
+- **Lightning Platform Specific**: Rules tailored for Salesforce platform constraints and governor limits
+- **Custom Rule Sets**: Support for custom PMD rule sets and organization-specific coding standards
 
 If your root folder is not **force-app**, please set variable `SALESFORCE_SFDX_SCANNER_DIRECTORY`
 
@@ -94,7 +105,6 @@ sf scanner:run
 ### Help content
 
 ```shell
- ›   Warning: @salesforce/cli update available from 2.93.7 to 2.94.6.
 Scan a codebase with all the rules in the registry, or use parameters to filter the rules based on rulename, category, or ruleset.
 
 USAGE
@@ -148,7 +158,6 @@ GLOBAL FLAGS
 COMMANDS
   scanner run dfa  Scan codebase with all DFA rules by default.
 
- ›   Warning: @salesforce/cli update available from 2.93.7 to 2.94.6.
 Warning: Starting May 1, 2025, we no longer support v4.x of Code Analyzer. You should use v5.x of Code Analyzer instead. See https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/code-analyzer.html. For information about migrating from v4.x to v5.x, see https://developer.salesforce.com/docs/platform/salesforce-code-analyzer/guide/migrate.html.
  name                                                   languages   categories            rulesets [dep] engine            is dfa is pilot
  ────────────────────────────────────────────────────── ─────────── ───────────────────── ────────────── ───────────────── ────── ────────
@@ -376,7 +385,7 @@ Warning: Starting May 1, 2025, we no longer support v4.x of Code Analyzer. You s
 ```dockerfile
 # Parent descriptor install
 # renovate: datasource=npm depName=@salesforce/cli
-ARG NPM_SALESFORCE_CLI_VERSION=2.93.7
+ARG NPM_SALESFORCE_CLI_VERSION=2.94.6
 # renovate: datasource=npm depName=@salesforce/plugin-packaging
 ARG NPM_SALESFORCE_PLUGIN_PACKAGING_VERSION=2.16.0
 # renovate: datasource=npm depName=sfdx-hardis

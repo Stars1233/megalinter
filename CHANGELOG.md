@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 Note: Can be used with `oxsecurity/megalinter@beta` in your GitHub Action mega-linter.yml file, or with `oxsecurity/megalinter:beta` docker image
 
 - Core
+  - Add copilot instructions for GitHub Copilot
 
 - New linters
 
@@ -21,11 +22,16 @@ Note: Can be used with `oxsecurity/megalinter@beta` in your GitHub Action mega-l
 - Fixes
 
 - Reporters
+  - New default display for Pull Request comments, with expandable sections containing the first 1000 lines of the output log. Former display remains available by defining `REPORTERS_MARKDOWN_SUMMARY_TYPE=table`
+  - Markdown summary reporter:
+    - Write a file for Github integration if GITHUB_STEP_SUMMARY is set
+    - Truncate less linter output lines
 
 - Doc
   - Update documentation in all megalinter descriptor files to improve accuracy and consistency
   - Fix incorrect information in linters documentation and descriptors
   - Remove dead links
+  - Add linter description (linter_text) in all linter descriptor, to generate a more exhaustive documentation.
 
 - Flavors
 
@@ -66,6 +72,10 @@ Note: Can be used with `oxsecurity/megalinter@beta` in your GitHub Action mega-l
   - [ruff-format](https://github.com/astral-sh/ruff) from 0.12.0 to **0.12.1** on 2025-06-27
   - [ruff](https://github.com/astral-sh/ruff) from 0.12.0 to **0.12.1** on 2025-06-27
   - [prettier](https://prettier.io/) from 3.6.1 to **3.6.2** on 2025-06-27
+  - [golangci-lint](https://golangci-lint.run/) from 2.1.6 to **2.2.0** on 2025-06-29
+  - [csharpier](https://csharpier.com/) from 1.0.2 to **1.0.3** on 2025-06-29
+  - [checkstyle](https://checkstyle.org/) from 10.26.0 to **10.26.1** on 2025-06-29
+  - [terragrunt](https://terragrunt.gruntwork.io) from 0.81.10 to **0.82.3** on 2025-06-29
 <!-- linter-versions-end -->
 
 ## [v8.8.0] - 2024-06-15
