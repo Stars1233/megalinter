@@ -13,9 +13,40 @@ description: How to use cfn-lint (configure, ignore files, ignore errors, help &
 
 [![GitHub stars](https://img.shields.io/github/stars/aws-cloudformation/cfn-lint?cacheSeconds=3600)](https://github.com/aws-cloudformation/cfn-lint) ![sarif](https://shields.io/badge/-SARIF-orange) [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/aws-cloudformation/cfn-lint?sort=semver)](https://github.com/aws-cloudformation/cfn-lint/releases) [![GitHub last commit](https://img.shields.io/github/last-commit/aws-cloudformation/cfn-lint)](https://github.com/aws-cloudformation/cfn-lint/commits) [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/aws-cloudformation/cfn-lint)](https://github.com/aws-cloudformation/cfn-lint/graphs/commit-activity/) [![GitHub contributors](https://img.shields.io/github/contributors/aws-cloudformation/cfn-lint)](https://github.com/aws-cloudformation/cfn-lint/graphs/contributors/)
 
+**CFN-Lint** (CloudFormation Linter) is the official AWS tool for validating AWS CloudFormation yaml/json templates against the AWS CloudFormation resource provider schemas and additional best practice checks.
+
+**Key Features:**
+
+- **AWS Schema Validation**: Validates templates against official AWS CloudFormation resource provider schemas
+- **Property Validation**: Checks valid values for resource properties and ensures correct data types
+- **Best Practice Enforcement**: Identifies CloudFormation best practices and anti-patterns
+- **SAM Support**: Fully supports AWS Serverless Application Model (SAM) templates with transformation validation
+- **Custom Rules**: Supports custom one-line rules for organization-specific requirements
+- **Multiple Output Formats**: Supports JSON, JUnit, SARIF, and other output formats
+- **Region-Specific Validation**: Tests templates against multiple AWS regions to catch region-specific issues
+- **Extensible Rules Engine**: Comprehensive collection of rules with support for custom rule extensions
+
+**Common validations include:**
+
+- Resource type and property validation
+- Parameter constraints and dependencies  
+- Output and condition logic validation
+- Security best practices (IAM policies, encryption, etc.)
+- Resource naming and tagging conventions
+- Cross-reference validation between resources
+
+**Advanced features:**
+
+- Template metadata configuration for granular control
+- Graph visualization of template resources
+- Experimental rules for cutting-edge CloudFormation features
+- Override specifications for custom organizational requirements
+
+CFN-Lint helps ensure your CloudFormation templates are valid, secure, and follow AWS best practices before deployment.
+
 ## cfn-lint documentation
 
-- Version in MegaLinter: **1.36.1**
+- Version in MegaLinter: **1.37.0**
 - Visit [Official Web Site](https://github.com/aws-cloudformation/cfn-lint#readme){target=_blank}
 - See [How to configure cfn-lint rules](https://github.com/aws-cloudformation/cfn-lint#configuration){target=_blank}
   - If custom `.cfnlintrc.yml` config file isn't found, [.cfnlintrc.yml](https://github.com/oxsecurity/megalinter/tree/main/TEMPLATES/.cfnlintrc.yml){target=_blank} will be used
@@ -113,6 +144,12 @@ Standard:
                         Ignore failures with Bad template
   --ignore-templates IGNORE_TEMPLATES [IGNORE_TEMPLATES ...]
                         Ignore templates
+  --deployment-files DEPLOYMENT_FILES [DEPLOYMENT_FILES ...]
+                        Deployment files
+  --parameters PARAMETERS [PARAMETERS ...]
+                        A list of parameters
+  --parameter-files PARAMETER_FILES [PARAMETER_FILES ...]
+                        A list of parameter files
   -f, --format {quiet,parseable,json,junit,pretty,sarif}
                         Output Format
   -l, --list-rules      list all the rules
@@ -166,8 +203,8 @@ Advanced / Debugging:
 - Dockerfile commands :
 ```dockerfile
 # renovate: datasource=pypi depName=cfn-lint
-ARG PIP_CFN_LINT_VERSION=1.36.1
+ARG PIP_CFN_LINT_VERSION=1.37.0
 ```
 
 - PIP packages (Python):
-  - [cfn-lint[sarif]==1.36.1](https://pypi.org/project/cfn-lint[sarif]/1.36.1)
+  - [cfn-lint[sarif]==1.37.0](https://pypi.org/project/cfn-lint[sarif]/1.37.0)

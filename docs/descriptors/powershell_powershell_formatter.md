@@ -7,6 +7,17 @@ description: How to use powershell_formatter (configure, ignore files, ignore er
 # <a href="https://github.com/PowerShell/PSScriptAnalyzer" target="blank" title="Visit linter Web Site"><img src="https://raw.githubusercontent.com/PowerShell/PSScriptAnalyzer/refs/heads/main/logo.png" alt="powershell_formatter" height="100px" class="megalinter-logo"></a>powershell_formatter
 [![GitHub stars](https://img.shields.io/github/stars/PowerShell/PSScriptAnalyzer?cacheSeconds=3600)](https://github.com/PowerShell/PSScriptAnalyzer) ![formatter](https://shields.io/badge/-format-yellow) [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/PowerShell/PSScriptAnalyzer?sort=semver)](https://github.com/PowerShell/PSScriptAnalyzer/releases) [![GitHub last commit](https://img.shields.io/github/last-commit/PowerShell/PSScriptAnalyzer)](https://github.com/PowerShell/PSScriptAnalyzer/commits) [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/PowerShell/PSScriptAnalyzer)](https://github.com/PowerShell/PSScriptAnalyzer/graphs/commit-activity/) [![GitHub contributors](https://img.shields.io/github/contributors/PowerShell/PSScriptAnalyzer)](https://github.com/PowerShell/PSScriptAnalyzer/graphs/contributors/)
 
+**PowerShell Formatter** provides automatic code formatting for PowerShell scripts and modules through PSScriptAnalyzer's Invoke-Formatter cmdlet. It ensures consistent code appearance and structure across PowerShell projects by applying standardized formatting rules.
+
+**Key Features:**
+
+- **Automatic Formatting**: Consistent indentation, spacing, and code structure formatting
+- **Configurable Rules**: Customizable formatting settings through .psd1 configuration files
+- **Code Standardization**: Enforces uniform code style across teams and projects
+- **Encoding Support**: Configurable output encoding (UTF-8, ASCII, Unicode, etc.) for different environments
+- **Preserve Semantics**: Formats code while maintaining original functionality and behavior
+- **Team Collaboration**: Shared configuration ensures consistent formatting across development teams
+
 ## powershell_formatter documentation
 
 - Version in MegaLinter: **7.5.2**

@@ -13,9 +13,23 @@ description: How to use snakemake (configure, ignore files, ignore errors, help 
 
 [![GitHub stars](https://img.shields.io/github/stars/snakemake/snakemake?cacheSeconds=3600)](https://github.com/snakemake/snakemake) [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/snakemake/snakemake?sort=semver)](https://github.com/snakemake/snakemake/releases) [![GitHub last commit](https://img.shields.io/github/last-commit/snakemake/snakemake)](https://github.com/snakemake/snakemake/commits) [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/snakemake/snakemake)](https://github.com/snakemake/snakemake/graphs/commit-activity/) [![GitHub contributors](https://img.shields.io/github/contributors/snakemake/snakemake)](https://github.com/snakemake/snakemake/graphs/contributors/)
 
+**Snakemake** is a comprehensive workflow management system with powerful built-in linting capabilities for validating computational workflow definitions. It ensures Snakefiles are properly structured and follow best practices for reproducible research.
+
+**Key Features:**
+
+- **Workflow Validation**: Comprehensive checking of Snakefile syntax, rule definitions, and workflow structure
+- **Dependency Analysis**: Validates input/output file specifications and dependency chains between rules
+- **Configuration Checking**: Ensures proper configuration file structure and parameter definitions
+- **Python Integration**: Validates embedded Python code within rules and workflow logic
+- **Resource Specification**: Checks resource requirements (memory, CPU, time) and cluster configurations
+- **File Path Validation**: Verifies that file paths and wildcards are correctly specified and resolvable
+- **Best Practices Enforcement**: Promotes reproducible workflow design and scientific computing standards
+- **Early Error Detection**: Catches workflow issues before expensive computational runs begin
+- **Bioinformatics Ready**: Specialized support for scientific computing, bioinformatics, and data analysis pipelines
+
 ## snakemake documentation
 
-- Version in MegaLinter: **9.6.2**
+- Version in MegaLinter: **9.6.3**
 - Visit [Official Web Site](https://snakemake.github.io/){target=_blank}
 - See [How to configure snakemake rules](https://snakemake.readthedocs.io/en/stable/snakefiles/configuration.html){target=_blank}
 
@@ -135,7 +149,7 @@ usage: snakemake [-h] [--dry-run] [--profile PROFILE]
                  [--filegraph] [--d3dag] [--summary] [--detailed-summary]
                  [--archive FILE] [--cleanup-metadata FILE [FILE ...]]
                  [--cleanup-shadow] [--skip-script-cleanup] [--unlock]
-                 [--list-changes {input,params,code}] [--list-input-changes]
+                 [--list-changes {params,input,code}] [--list-input-changes]
                  [--list-params-changes] [--list-untracked]
                  [--delete-all-output | --delete-temp-output]
                  [--keep-incomplete] [--drop-metadata] [--version]
@@ -181,7 +195,7 @@ usage: snakemake [-h] [--dry-run] [--profile PROFILE]
                  [--scheduler-solver-path SCHEDULER_SOLVER_PATH]
                  [--deploy-sources QUERY CHECKSUM]
                  [--target-jobs TARGET_JOBS [TARGET_JOBS ...]]
-                 [--mode {default,subprocess,remote}]
+                 [--mode {subprocess,remote,default}]
                  [--report-html-path VALUE]
                  [--report-html-stylesheet-path VALUE]
                  [targets ...]
@@ -657,7 +671,7 @@ UTILITIES:
                         (default: False)
   --unlock              Remove a lock on the working directory. (default:
                         False)
-  --list-changes, --lc {input,params,code}
+  --list-changes, --lc {params,input,code}
                         List all output files for which the given items (code,
                         input, params) have changed since creation.
   --list-input-changes, --li
@@ -897,7 +911,7 @@ REMOTE EXECUTION:
                         is up to your responsibility. Any used image has to
                         contain a working snakemake installation that is
                         compatible with (or ideally the same as) the currently
-                        running version. (default: snakemake/snakemake:v9.6.2)
+                        running version. (default: snakemake/snakemake:v9.6.3)
   --immediate-submit, --is
                         Immediately submit all jobs to the cluster instead of
                         waiting for present input files. This will fail,
@@ -1016,7 +1030,7 @@ INTERNAL:
   --target-jobs TARGET_JOBS [TARGET_JOBS ...]
                         Internal use only: Target particular jobs by
                         RULE:WILDCARD1=VALUE,WILDCARD2=VALUE,...
-  --mode {default,subprocess,remote}
+  --mode {subprocess,remote,default}
                         Internal use only: Set execution mode of Snakemake.
                         (default: default)
 
@@ -1037,8 +1051,8 @@ defaults.
 - Dockerfile commands :
 ```dockerfile
 # renovate: datasource=pypi depName=snakemake
-ARG PIP_SNAKEMAKE_VERSION=9.6.2
+ARG PIP_SNAKEMAKE_VERSION=9.6.3
 ```
 
 - PIP packages (Python):
-  - [snakemake==9.6.2](https://pypi.org/project/snakemake/9.6.2)
+  - [snakemake==9.6.3](https://pypi.org/project/snakemake/9.6.3)

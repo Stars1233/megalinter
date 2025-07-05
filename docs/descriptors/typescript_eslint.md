@@ -13,9 +13,18 @@ description: How to use eslint (configure, ignore files, ignore errors, help & v
 
 [![GitHub stars](https://img.shields.io/github/stars/typescript-eslint/typescript-eslint?cacheSeconds=3600)](https://github.com/typescript-eslint/typescript-eslint) ![autofix](https://shields.io/badge/-autofix-green) ![sarif](https://shields.io/badge/-SARIF-orange) [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/typescript-eslint/typescript-eslint?sort=semver)](https://github.com/typescript-eslint/typescript-eslint/releases) [![GitHub last commit](https://img.shields.io/github/last-commit/typescript-eslint/typescript-eslint)](https://github.com/typescript-eslint/typescript-eslint/commits) [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/typescript-eslint/typescript-eslint)](https://github.com/typescript-eslint/typescript-eslint/graphs/commit-activity/) [![GitHub contributors](https://img.shields.io/github/contributors/typescript-eslint/typescript-eslint)](https://github.com/typescript-eslint/typescript-eslint/graphs/contributors/)
 
-eslint requires a custom configuration file applicable to your project.
+**TypeScript ESLint** enables ESLint to run on TypeScript code, bringing together the best of both tools to help you write high-quality TypeScript applications.
 
-You can create it by typing `npx eslint --init` in the root of your repository
+**Key Features:**
+
+- **TypeScript Parser**: Allows ESLint to parse TypeScript syntax natively, understanding decorators, interfaces, enums, and modern TypeScript features
+- **Type-Aware Linting**: Leverages TypeScript's type information for advanced static analysis that can catch type-related errors and enforce type safety
+- **100+ TypeScript-Specific Rules**: Comprehensive rule set covering TypeScript best practices, type definitions, naming conventions, and code quality
+- **Seamless Integration**: Drop-in replacement for standard ESLint with TypeScript projects, maintaining all existing ESLint functionality
+- **Multiple Configuration Presets**: Recommended, strict, and stylistic configurations for different project requirements
+- **Performance Optimized**: Efficient parsing and linting designed for large TypeScript codebases with minimal performance impact
+
+ESLint requires a custom configuration file applicable to your project. You can create it by typing `npx eslint --init` in the root of your repository
 
 ## eslint documentation
 
@@ -200,15 +209,15 @@ ARG NPM_ESLINT_PLUGIN_PRETTIER_VERSION=5.5.1
 # renovate: datasource=npm depName=eslint-plugin-promise
 ARG NPM_ESLINT_PLUGIN_PROMISE_VERSION=6.6.0
 # renovate: datasource=npm depName=@babel/eslint-parser
-ARG NPM_BABEL_ESLINT_PARSER_VERSION=7.27.5
+ARG NPM_BABEL_ESLINT_PARSER_VERSION=7.28.0
 # renovate: datasource=npm depName=prettier
 ARG NPM_PRETTIER_VERSION=3.6.2
 # renovate: datasource=npm depName=prettyjson
 ARG NPM_PRETTYJSON_VERSION=1.2.5
 # renovate: datasource=npm depName=@typescript-eslint/eslint-plugin
-ARG NPM_TYPESCRIPT_ESLINT_ESLINT_PLUGIN_VERSION=8.35.0
+ARG NPM_TYPESCRIPT_ESLINT_ESLINT_PLUGIN_VERSION=8.35.1
 # renovate: datasource=npm depName=@typescript-eslint/parser
-ARG NPM_TYPESCRIPT_ESLINT_PARSER_VERSION=8.35.0
+ARG NPM_TYPESCRIPT_ESLINT_PARSER_VERSION=8.35.1
 # renovate: datasource=npm depName=@microsoft/eslint-formatter-sarif
 ARG NPM_MICROSOFT_ESLINT_FORMATTER_SARIF_VERSION=3.1.0
 ```
@@ -224,9 +233,9 @@ ARG NPM_MICROSOFT_ESLINT_FORMATTER_SARIF_VERSION=3.1.0
   - [eslint-plugin-n@16.6.2](https://www.npmjs.com/package/eslint-plugin-n/v/16.6.2)
   - [eslint-plugin-prettier@5.5.1](https://www.npmjs.com/package/eslint-plugin-prettier/v/5.5.1)
   - [eslint-plugin-promise@6.6.0](https://www.npmjs.com/package/eslint-plugin-promise/v/6.6.0)
-  - [@babel/eslint-parser@7.27.5](https://www.npmjs.com/package/@babel/eslint-parser/v/7.27.5)
+  - [@babel/eslint-parser@7.28.0](https://www.npmjs.com/package/@babel/eslint-parser/v/7.28.0)
   - [prettier@3.6.2](https://www.npmjs.com/package/prettier/v/3.6.2)
   - [prettyjson@1.2.5](https://www.npmjs.com/package/prettyjson/v/1.2.5)
-  - [@typescript-eslint/eslint-plugin@8.35.0](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin/v/8.35.0)
-  - [@typescript-eslint/parser@8.35.0](https://www.npmjs.com/package/@typescript-eslint/parser/v/8.35.0)
+  - [@typescript-eslint/eslint-plugin@8.35.1](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin/v/8.35.1)
+  - [@typescript-eslint/parser@8.35.1](https://www.npmjs.com/package/@typescript-eslint/parser/v/8.35.1)
   - [@microsoft/eslint-formatter-sarif@3.1.0](https://www.npmjs.com/package/@microsoft/eslint-formatter-sarif/v/3.1.0)
