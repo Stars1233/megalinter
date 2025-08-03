@@ -61,7 +61,7 @@ ARG POWERSHELL_VERSION=7.5.2
 # renovate: datasource=npm depName=typescript
 ARG NPM_TYPESCRIPT_VERSION=5.8.3
 # renovate: datasource=nuget depName=csharpier
-ARG CSHARP_CSHARPIER_VERSION=1.0.3
+ARG CSHARP_CSHARPIER_VERSION=1.1.0
 # renovate: datasource=nuget depName=roslynator.dotnet.cli
 ARG CSHARP_ROSLYNATOR_VERSION=0.10.2
 # renovate: datasource=npm depName=prettier
@@ -86,7 +86,7 @@ ARG PIP_SNAKEFMT_VERSION=0.11.0
 # renovate: datasource=pypi depName=pip
 ARG PIP_PIP_VERSION=25.2
 # renovate: datasource=pypi depName=virtualenv
-ARG PIP_VIRTUALENV_VERSION=20.32.0
+ARG PIP_VIRTUALENV_VERSION=20.33.0
 # renovate: datasource=github-tags depName=rust-lang/rust
 ARG RUST_RUST_VERSION=1.88.0
 
